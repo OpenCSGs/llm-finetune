@@ -1,0 +1,35 @@
+model_config:
+  warmup: True
+  model_task: fill-mask
+  model_id: bert-base-uncased
+  max_input_words: 800
+  initialization:
+    initializer:
+      type: Finetune
+      dtype: float32
+      from_pretrained_kwargs:
+        trust_remote_code: true
+ft_config:
+  ft_task: "sequenceclassification"
+  data_config:
+    data_path: glue
+    subset: mrpc
+    local_path: dataset/glue/mrpc/1.0.0
+    num_row: 30     # 0: Train with all data.  >0: Test with $num_row data
+    # train_file:
+    # validation_file:
+    input_columns: 
+      - "sentence"
+    validation_column: validation
+    # labels
+  train_config:
+    base_config:
+      checkpoints_output_dir: finetune_models/
+      per_device_train_batch_size: 8
+      learning_rate: 2e-5
+      num_train_epochs: 2
+      weight_decay: 0.01
+      logging_strategy: steps
+      evaluation_strategy: steps
+      save_strategy: steps
+      save_steps: 100

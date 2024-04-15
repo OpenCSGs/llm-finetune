@@ -1,0 +1,54 @@
+model_config:
+  warmup: True
+  model_task: fill-mask
+  model_id: distilbert-base-uncased
+  max_input_words: 800
+  initialization:
+    runtime_env:
+      pip:
+        - deepspeed==0.9.2
+        - accelerate
+    s3_mirror_config:
+      bucket_uri: /tmp/hub/models/distilbert-base-uncased/
+    #   bucket_uri: s3://large-dl-models-mirror/models--amazon--LightGPT/main-safetensors/
+    initializer:
+      type: Finetune
+      dtype: float32
+      from_pretrained_kwargs:
+        # use_cache: true
+        trust_remote_code: true
+      # use_kernel: true   # for deepspped type only
+      # max_tokens: 1536   # for deepspped type only
+ft_config:
+  ft_task: maskedlm
+  data_config:
+    data_path: imdb
+    subset:
+    local_path: /tmp/hub/dataset/imdb/plain_text/1.0.0
+    num_row: 30
+    # train_file:
+    # validation_file:
+    input_columns: 
+      - "sentence"
+    validation_column: validation
+    # labels
+  train_config:
+    base_config:
+      checkpoints_output_dir: /tmp/finetune
+      per_device_train_batch_size: 32
+      learning_rate: 2e-5
+      num_train_epochs: 2
+      weight_decay: 0.01
+      remove_unused_columns: false
+      logging_strategy: steps
+      evaluation_strategy: steps
+      save_strategy: steps
+      save_steps: 100
+scaling_config:
+  num_workers: 7
+  num_gpus_per_worker: 0
+  num_cpus_per_worker: 1   # for infrence
+  # resources_per_worker:
+  #   accelerator_type_cpu: 0.01
+  ray_actor_options:
+    num_cpus: 0.1

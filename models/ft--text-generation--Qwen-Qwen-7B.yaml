@@ -1,0 +1,38 @@
+model_config:
+  warmup: True
+  model_task: text-generation
+  model_id: Qwen/Qwen-7B
+  max_input_words: 800
+  initialization:
+    initializer:
+      type: Finetune
+      dtype: float32
+      from_pretrained_kwargs:
+        trust_remote_code: true
+  add_special_tokens:
+    pad_token: "<|extra_0|>"
+    eos_token: "<|endoftext|>"
+ft_config:
+  ft_task: "text-generation"
+  data_config:
+    data_path: AdvertiseGen
+    local_path: dataset/AdvertiseGen
+    num_row: 30     # 0: Train with all data.  >0: Test with $num_row data
+    input_columns: 
+      - "content"
+    validation_column: summary
+  train_config:
+    base_config:
+      max_length: 500
+      checkpoints_output_dir: /tmp/finetune
+      per_device_train_batch_size: 1
+      per_device_eval_batch_size: 1
+      learning_rate: 2e-5
+      num_train_epochs: 2
+      weight_decay: 0.01
+      remove_unused_columns: true
+      logging_strategy: steps
+      evaluation_strategy: steps
+      save_strategy: steps
+      save_steps: 25
+      max_steps: 50
