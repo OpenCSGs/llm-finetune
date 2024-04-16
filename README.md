@@ -14,7 +14,7 @@ Use SHELL `bash` for command
 ```bash
 git clone https://git-devops.opencsg.com/product/starnet/llm-finetune.git
 cd llm-finetune
-pip install .  # Install from CN: 'pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple'
+pip install .  # Install from CN(中国镜像安装): 'pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple'
 ```
 
 ## Finetune models
