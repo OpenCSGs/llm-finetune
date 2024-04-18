@@ -12,7 +12,7 @@ The guide below walks you through installation and how to run LLM finetune.
 Use SHELL `bash` for command
 
 ```bash
-git clone https://git-devops.opencsg.com/product/starnet/llm-finetune.git
+git clone https://github.com/OpenCSGs/llm-finetune.git
 cd llm-finetune
 pip install .  # Install from CN(亦可用清华源安装): 'pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple'
 ```
@@ -28,7 +28,7 @@ llmfinetune run-ft --ft=./models/ft--sequenceclassification--bert-base-uncased-l
 python llm_finetune.py run-ft --ft=./models/ft--sequenceclassification--bert-base-uncased-lora.yaml
 ```
 
-## 3. Addtional launcher: Launch by accelerate or deepspeed
+## 3. (Optional) Addtional launcher: Launch by accelerate or deepspeed
 Ensure accelerate and deepspeed are installed, then follow below steps.
 
 ### Launch by accelerate
