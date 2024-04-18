@@ -48,7 +48,7 @@ class TransformersFT(BaseFT):
         initialize_node(self.model_config.model_id, self.model_config.initialization.s3_mirror_config)
         logger.info(f"Start loading tokenizer for finetune {self.model_config.model_id}")
         # self.model_config.model_id = '/root/.cache/huggingface/hub/ZhipuAI/chatglm3-6b/'
-        self.model_config.model_id = '/data/hhwang/models/chatglm2-6b/'
+        # self.model_config.model_id = '/data/hhwang/models/chatglm2-6b/'
         tokenizer = self.initializer.load_tokenizer(self.model_config.model_id)
         if self.model_config.add_special_tokens:
             add_special_tokens = self.model_config.add_special_tokens
