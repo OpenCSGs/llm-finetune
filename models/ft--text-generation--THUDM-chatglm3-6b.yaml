@@ -8,7 +8,7 @@ model_config:
     # s3_mirror_config:
       # endpoint_url: http://39.107.108.170:9000 # Optinal for custom S3 storage endpoint url 
       # bucket_uri: s3://opt-125m/facemodel/  # Must include hash file with commit id in repo
-      # bucket_uri: /root/.cache/huggingface/hub/ZhipuAI/chatglm3-6b/ # Local path of model with hash file
+      # bucket_uri: /root/.cache/hub/ZhipuAI/chatglm3-6b/ # Local path of model with hash file
     initializer:
       type: Finetune
       dtype: float32
