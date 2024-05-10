@@ -1,9 +1,9 @@
 
 # LLM - Finetune
 
-The guide below walks you through installation and how to run LLM finetune.
-
 <img src="./docs/llm-finetune.png" alt="image" width=600 height="auto">
+
+Two steps to run your LLM finetune:
 
 ## 1. Easy Install
 
@@ -21,14 +21,13 @@ pip install .  # Install from CN(亦可用清华源安装): 'pip install . -i ht
 ### Finetune model by command
 
 ```
-# Option-1: Run by command
 llmfinetune run-ft --ft=./models/ft--sequenceclassification--bert-base-uncased-lora.yaml
-
-# Option-2: Run locally
-python llm_finetune.py run-ft --ft=./models/ft--sequenceclassification--bert-base-uncased-lora.yaml
 ```
 
-## 3. (Optional) Addtional launcher: Launch by accelerate or deepspeed
+Your Finetune task is starting now. 
+
+*******
+## (Optional) Addtional launcher: Launch by accelerate or deepspeed
 Ensure accelerate and deepspeed are installed, then follow below steps.
 
 ### Launch by accelerate
