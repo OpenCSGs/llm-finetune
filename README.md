@@ -26,6 +26,8 @@ llmfinetune run-ft --ft=./models/ft--sequenceclassification--bert-base-uncased-l
 
 Your Finetune task is starting now. 
 
+- You can add more yaml for your own to define your tasks.
+
 *******
 ## (Optional) Addtional launcher: Launch by accelerate or deepspeed
 Ensure accelerate and deepspeed are installed, then follow below steps.
