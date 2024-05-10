@@ -103,8 +103,6 @@ accelerate launch --config_file default_config.yaml llmfinetune ...
 
 All hosts need access without password each other
 
-##### Case 1: only accelerate
-
 ```
 # default_config.yaml
 compute_environment: LOCAL_MACHINE
@@ -140,49 +138,6 @@ accelerate launch --config_file default_config.yaml \
 
 # --machine_rank: 0 for the main/master node, for other nodes is 1,2,3 etc.
 ```
-
-##### Case 2: via deepspeed
-
-```
-# myhostfile with all hosts IP and num of GPUs
-192.168.1.9 slots=8
-192.168.1.7 slots=8
-
-# defalut_config.yaml
-compute_environment: LOCAL_MACHINE
-deepspeed_config:
-  deepspeed_hostfile: ./path/myhostfile
-  deepspeed_multinode_launcher: pdsh
-  gradient_accumulation_steps: 1
-  gradient_clipping: 1.0
-  offload_optimizer_device: cpu
-  offload_param_device: cpu
-  zero3_init_flag: true
-  zero3_save_16bit_model: true
-  zero_stage: 3
-distributed_type: DEEPSPEED
-dynamo_config: {}
-fsdp_config: {}
-machine_rank: 0
-main_process_ip: 192.168.1.9  # master host ip
-main_process_port: 29500      # master host port
-main_training_function: main
-megatron_lm_config: {}
-mixed_precision: fp16
-num_machines: 2               # num of hosts
-num_processes: 16             # num of GPUs
-rdzv_backend: static
-same_network: true
-tpu_env: []
-tpu_use_cluster: false
-tpu_use_sudo: false
-use_cpu: false
-
-# Run
-accelerate launch --config_file default_config.yaml ...
-```
-
-Notes: How to define which GPU should be used on host?
 
 #### Finetune by Deepspeed for multi-GPUs on multi-hosts
 
