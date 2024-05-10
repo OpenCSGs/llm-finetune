@@ -1,6 +1,8 @@
 
 # LLM - Finetune
 
+The framework of training large language models，support lora, full parameters fine tune etc, define yaml to start training/fine tune of your defined models, data and methods. Easy define and easy start. 大模型训练框架，支持lora、全参数微调等，通过定义yaml文件指定基础模型、数据集和训练参数，轻松开启您的大模型训练和微调工作。欢迎关注反馈和Star⭐️
+
 <img src="./docs/llm-finetune.png" alt="image" width=600 height="auto">
 
 Two steps to run your LLM finetune:

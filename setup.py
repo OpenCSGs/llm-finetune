@@ -1,6 +1,5 @@
 import os
 from setuptools import find_packages, setup
-
 this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, "requirements.txt"), encoding="utf-8") as f:
     INSTALL_REQUIRES = f.read().splitlines()
