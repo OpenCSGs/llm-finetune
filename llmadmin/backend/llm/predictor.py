@@ -22,7 +22,7 @@ from llmadmin.backend.llm.utils import (
 )
 from llmadmin.backend.logger import get_logger
 from llmadmin.backend.server.models import Args, LLMConfig, Prompt, Response
-from llmadmin.backend.server.utils import render_gradio_params
+# from llmadmin.backend.server.utils import render_gradio_params
 
 WARMUP_PROMPT = "Write a short story."
 
@@ -31,105 +31,105 @@ initialize_node_remote = ray.remote(initialize_node)
 logger = get_logger(__name__)
 
 
-@timeit
-def init_model(
-    llm_config: LLMConfig,
-    world_size: int,
-    local_rank: int,
-    max_batch_size: Optional[int] = None,
-):
-    """Initialize the model.
+# @timeit
+# def init_model(
+#     llm_config: LLMConfig,
+#     world_size: int,
+#     local_rank: int,
+#     max_batch_size: Optional[int] = None,
+# ):
+#     """Initialize the model.
 
-    Args:
-        llm_config (LLM): LLM configuration.
-        world_size (int): Number of GPUs.
-        local_rank (int): Local rank of the current GPU.
-        max_batch_size (Optional[int], optional): Maximum batch size. Defaults to None.
-    """
-    logger.info(f"Initializing model {llm_config.model_id}...")
+#     Args:
+#         llm_config (LLM): LLM configuration.
+#         world_size (int): Number of GPUs.
+#         local_rank (int): Local rank of the current GPU.
+#         max_batch_size (Optional[int], optional): Maximum batch size. Defaults to None.
+#     """
+#     logger.info(f"Initializing model {llm_config.model_id}...")
 
-    # Lazy import so that the new cache location is used
-    torch.backends.cuda.matmul.allow_tf32 = True
-    if torch.cuda.is_available():
-        device = torch.device(f"cuda:{local_rank}")
-    else:
-        device = torch.device("cpu")
+#     # Lazy import so that the new cache location is used
+#     torch.backends.cuda.matmul.allow_tf32 = True
+#     if torch.cuda.is_available():
+#         device = torch.device(f"cuda:{local_rank}")
+#     else:
+#         device = torch.device("cpu")
     
-    initializer_name = llm_config.initialization.initializer
-    if not isinstance(initializer_name, str):
-        initializer_name = initializer_name.type
+#     initializer_name = llm_config.initialization.initializer
+#     if not isinstance(initializer_name, str):
+#         initializer_name = initializer_name.type
 
-    logger.info(f"Initializer name is {initializer_name} on device {device}")
-    initializer = get_initializer_cls_by_name(initializer_name)(
-        device=device,
-        world_size=world_size,
-        **llm_config.initialization.initializer.get_initializer_kwargs(),
-    )
+#     logger.info(f"Initializer name is {initializer_name} on device {device}")
+#     initializer = get_initializer_cls_by_name(initializer_name)(
+#         device=device,
+#         world_size=world_size,
+#         **llm_config.initialization.initializer.get_initializer_kwargs(),
+#     )
     
-    pipeline_name = llm_config.initialization.pipeline
-    additional_kwargs = dict (
-        task = llm_config.model_task,
-    )
-    logger.info(f"Pipeline name is {pipeline_name}")
-    pipeline = get_pipeline_cls_by_name(pipeline_name).from_initializer(
-        initializer,
-        llm_config.actual_hf_model_id,
-        prompt_format=(llm_config.generation.prompt_format if llm_config.generation else None),
-        **additional_kwargs
-    )
+#     pipeline_name = llm_config.initialization.pipeline
+#     additional_kwargs = dict (
+#         task = llm_config.model_task,
+#     )
+#     logger.info(f"Pipeline name is {pipeline_name}")
+#     pipeline = get_pipeline_cls_by_name(pipeline_name).from_initializer(
+#         initializer,
+#         llm_config.actual_hf_model_id,
+#         prompt_format=(llm_config.generation.prompt_format if llm_config.generation else None),
+#         **additional_kwargs
+#     )
 
-    # Warmup
-    # For DS w/ kernel inject, first batch the model gets MUST be of maximum batch size,
-    # otherwise subsequent batches with more entries than the first batch
-    # will raise CUDA errors if use_kernel=True.
-    batch_size = max_batch_size or 1
-    # prompt = [WARMUP_PROMPT] * (
-    #     int(llm_config.max_input_words / (len(WARMUP_PROMPT.split()) + 1)) + 1
-    # )
-    logger.info(f"Model {llm_config.model_id} batch_size is {batch_size}")
-    model_task_info = render_gradio_params(llm_config.model_task)
-    warmup_inputs = model_task_info["warmup"] if "warmup" in model_task_info else None
-    # prompt = WARMUP_PROMPT
-    # prompt = " ".join(prompt)
-    logger.info(f"Model {llm_config.model_id} is warming up, input is {warmup_inputs}...")
-    if llm_config.generation:
-        generate_kwargs = llm_config.generation.all_generate_kwargs.copy()
-        if "max_new_tokens" in generate_kwargs:
-            generate_kwargs["min_new_tokens"] = generate_kwargs["max_new_tokens"]
-    else:
-        generate_kwargs = {}
+#     # Warmup
+#     # For DS w/ kernel inject, first batch the model gets MUST be of maximum batch size,
+#     # otherwise subsequent batches with more entries than the first batch
+#     # will raise CUDA errors if use_kernel=True.
+#     batch_size = max_batch_size or 1
+#     # prompt = [WARMUP_PROMPT] * (
+#     #     int(llm_config.max_input_words / (len(WARMUP_PROMPT.split()) + 1)) + 1
+#     # )
+#     logger.info(f"Model {llm_config.model_id} batch_size is {batch_size}")
+#     model_task_info = render_gradio_params(llm_config.model_task)
+#     warmup_inputs = model_task_info["warmup"] if "warmup" in model_task_info else None
+#     # prompt = WARMUP_PROMPT
+#     # prompt = " ".join(prompt)
+#     logger.info(f"Model {llm_config.model_id} is warming up, input is {warmup_inputs}...")
+#     if llm_config.generation:
+#         generate_kwargs = llm_config.generation.all_generate_kwargs.copy()
+#         if "max_new_tokens" in generate_kwargs:
+#             generate_kwargs["min_new_tokens"] = generate_kwargs["max_new_tokens"]
+#     else:
+#         generate_kwargs = {}
 
-    warmup_success = False
-    while not warmup_success and llm_config.warmup and warmup_inputs:
-        try:
-            # assert batch_size > 0
-            # resp1 = generate(
-            #     [prompt] * batch_size,
-            #     pipeline,
-            #     **generate_kwargs,
-            # )
-            # logger.info(str(resp1))
-            # assert len(resp1) == batch_size
-            # assert all(x.generated_text for x in resp1)
-            logger.info(f"warmpup prompt is {warmup_inputs}")
-            resp = generate(
-                [warmup_inputs],
-                pipeline,
-                **generate_kwargs,
-            )
-            logger.info(f"warmpup response is {str(resp)}")
-            assert len(resp) > 0
-            # assert all(x.generated_text for x in resp2)
-            warmup_success = True
-        except torch.cuda.OutOfMemoryError:
-            batch_size -= 2
-            logger.warning(f"Warmup failed due to CUDA OOM, reducing batch size to {batch_size}")
+#     warmup_success = False
+#     while not warmup_success and llm_config.warmup and warmup_inputs:
+#         try:
+#             # assert batch_size > 0
+#             # resp1 = generate(
+#             #     [prompt] * batch_size,
+#             #     pipeline,
+#             #     **generate_kwargs,
+#             # )
+#             # logger.info(str(resp1))
+#             # assert len(resp1) == batch_size
+#             # assert all(x.generated_text for x in resp1)
+#             logger.info(f"warmpup prompt is {warmup_inputs}")
+#             resp = generate(
+#                 [warmup_inputs],
+#                 pipeline,
+#                 **generate_kwargs,
+#             )
+#             logger.info(f"warmpup response is {str(resp)}")
+#             assert len(resp) > 0
+#             # assert all(x.generated_text for x in resp2)
+#             warmup_success = True
+#         except torch.cuda.OutOfMemoryError:
+#             batch_size -= 2
+#             logger.warning(f"Warmup failed due to CUDA OOM, reducing batch size to {batch_size}")
 
-    logger.info(f"Model {llm_config.model_id} succesfully initialized, final batch size {batch_size}!")
+#     logger.info(f"Model {llm_config.model_id} succesfully initialized, final batch size {batch_size}!")
 
-    gc.collect()
+#     gc.collect()
 
-    return pipeline
+#     return pipeline
 
 
 @timeit

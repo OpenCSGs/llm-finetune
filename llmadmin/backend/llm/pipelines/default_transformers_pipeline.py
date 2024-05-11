@@ -9,7 +9,7 @@ from llmadmin.backend.server.models import Prompt, Response
 
 from ._base import BasePipeline
 from .utils import construct_prompts, construct_prompts_experimental
-from llmadmin.backend.server.utils import render_gradio_params
+# from llmadmin.backend.server.utils import render_gradio_params
 from .default_pipeline import DefaultPipeline
 
 try:
@@ -136,10 +136,10 @@ class DefaultTransformersPipeline(BasePipeline):
         pipe.pipeline = transformers_pipe
         transformers_pipe.device = pipe.device
 
-        if "task" in kwargs:
-            pipeline_info = render_gradio_params(kwargs["task"])
-            pipe.preprocess = pipeline_info["preprocess"]
-            pipe.postprocess = pipeline_info["postprocess"]
+        # if "task" in kwargs:
+        #     pipeline_info = render_gradio_params(kwargs["task"])
+        #     pipe.preprocess = pipeline_info["preprocess"]
+        #     pipe.postprocess = pipeline_info["postprocess"]
 
         return pipe
 

@@ -17,7 +17,6 @@ pydantic==1.10.9
 pymongo==4.6.2
 PyYAML==6.0.1
 Requests==2.31.0
-ray==2.6.2
 rich==13.7.1
 rouge_chinese==1.0.3
 torch==2.1.2
@@ -30,3 +29,5 @@ einops
 transformers_stream_generator
 tiktoken
 cpm_kernels
+ray[serve]==2.20.0
+ray[train]==2.20.0

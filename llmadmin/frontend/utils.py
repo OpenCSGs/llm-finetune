@@ -1,6 +1,6 @@
 import time
 
-import gradio as gr
+# import gradio as gr
 
 from llmadmin.common.constants import (
     G5_COST_PER_S_IN_DOLLARS,
@@ -18,7 +18,7 @@ LOGGER = None
 # else:
 #     print("No MongoDB logger defined, will default to the CSVLogger")
 #     LOGGER = gr.CSVLogger()
-LOGGER = gr.CSVLogger()
+# LOGGER = gr.CSVLogger()
 
 
 DEFAULT_STATS = t = """
@@ -53,35 +53,35 @@ def blank():
     return ""
 
 
-def select_button(button):
-    return button, gr.Button.update(variant="primary")
+# def select_button(button):
+#     return button, gr.Button.update(variant="primary")
 
 
-def deactivate_buttons():
-    return [gr.Button.update(interactive=False)] * NUM_LLM_OPTIONS
+# def deactivate_buttons():
+#     return [gr.Button.update(interactive=False)] * NUM_LLM_OPTIONS
 
 
-def unset_buttons():
-    return [gr.Button.update(variant="secondary", interactive=True)] * NUM_LLM_OPTIONS
+# def unset_buttons():
+#     return [gr.Button.update(variant="secondary", interactive=True)] * NUM_LLM_OPTIONS
 
 
-def paused_logger(*args):
-    time.sleep(1)
-    LOGGER.flag(*args)
+# def paused_logger(*args):
+#     time.sleep(1)
+#     LOGGER.flag(*args)
 
 
-def log_flags(*args):
-    LOGGER.flag(args)
+# def log_flags(*args):
+#     LOGGER.flag(args)
 
 
-THEME = gr.themes.Default(
-    primary_hue="blue",
-    secondary_hue="blue",
-).set(
-    border_color_accent="blue",
-    shadow_spread="20",
-    shadow_spread_dark="0",
-    button_primary_background_fill="*primary_200",
-    button_primary_background_fill_dark="*primary_700",
-    button_primary_border_color_dark="*primary_600",
-)
+# THEME = gr.themes.Default(
+#     primary_hue="blue",
+#     secondary_hue="blue",
+# ).set(
+#     border_color_accent="blue",
+#     shadow_spread="20",
+#     shadow_spread_dark="0",
+#     button_primary_background_fill="*primary_200",
+#     button_primary_background_fill_dark="*primary_700",
+#     button_primary_border_color_dark="*primary_600",
+# )
