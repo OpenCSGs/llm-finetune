@@ -1,13 +1,13 @@
-import ast
-import json
-from typing import Annotated, List, Optional
+# import ast
+# import json
+from typing import Annotated, Optional
 
 import typer
-from rich import print as rp
-from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
-
+# from rich import print as rp
+# from rich.console import Console
+# from rich.progress import Progress, SpinnerColumn, TextColumn
+# from rich.table import Table
+from ray.serve._private.constants import DEFAULT_HTTP_PORT
 from llmadmin.api import sdk
 
 app = typer.Typer()
@@ -17,7 +17,7 @@ model_type = typer.Option(
 )
 
 ft_define = typer.Option(
-    default=..., help="the fine tune define"
+    default=..., help="the fine tune yaml file"
 )
     
 app_name = typer.Option(
@@ -37,6 +37,40 @@ prompt_file_type = typer.Option(
 separator_type = typer.Option(help="Separator used in prompt files")
 results_type = typer.Option(help="Where to save the results")
 file_type = typer.Option(default=..., help="The flow graph")
+port_type = typer.Option(default=..., help="The port of service.")
+apiserver_scale_type = typer.Option(default=..., help="A string of dict for scaling service. for example: --scale-config=min_replicas=1,max_replicas=5")
+apiserver_resource_type = typer.Option(default=..., help="A string of dict for resource requirement. for example: --resource-config=num_cpus=1")
+
+@app.command()
+def start_apiserver(
+    port: Annotated[Optional[int], port_type] = DEFAULT_HTTP_PORT,
+    resource_config: Annotated[str, apiserver_resource_type] = None,
+    scale_config: Annotated[str, apiserver_scale_type] = None
+):
+    """Start a api server, it will provide apis.
+    Args:
+        *host: The host ip to run.
+        *port: The port to run.
+    """
+    sdk.start_apiserver(port=port, resource_config=resource_config, scale_config=scale_config)
+
+@app.command()
+def run_ft(ft: Annotated[str, ft_define]):
+    """Start a fine tune process.
+
+    Args:
+        *model: The model to run.
+    """
+    sdk.run_ft(ft)
+
+@app.command()
+def ray_ft(model: Annotated[str, ft_define]):
+    """Start a fine tune ray process.
+
+    Args:
+        *model: The model to run.
+    """
+    sdk.run_ray_ft(model)
 
 # @app.command()
 # def list_models(metadata: Annotated[bool, "Whether to print metadata"] = False):
@@ -204,24 +238,7 @@ file_type = typer.Option(default=..., help="The flow graph")
 #         )
 #     sdk.run_application(flow_graph)
 
-@app.command()
-def start_apiserver():
-    """Start a api server, it will provide apis.
 
-    Args:
-        *host: The host ip to run.
-        *port: The port to run.
-    """
-    sdk.start_apiserver()
-
-@app.command()
-def run_ft(ft: Annotated[str, ft_define]):
-    """Start a fine tune process.
-
-    Args:
-        *model: The model to run.
-    """
-    sdk.run_ft(ft)
 
 # @app.command()
 # def run_comparation():

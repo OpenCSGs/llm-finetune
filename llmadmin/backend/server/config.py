@@ -125,3 +125,4 @@ MODELS_MAPPING = {
 }
 
 URL = "http://127.0.0.1:8000/"
+SERVE_RUN_HOST = "0.0.0.0"

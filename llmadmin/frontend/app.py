@@ -3,7 +3,6 @@ import random
 import re
 import uuid
 from typing import Any, Dict, List
-import gradio as gr
 import ray
 import requests
 
