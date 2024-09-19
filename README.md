@@ -1,7 +1,7 @@
 
 # LLM - Finetune
 
-The framework of training large language models，support lora, full parameters fine tune etc, define yaml to start training/fine tune of your defined models, data and methods. Easy define and easy start. 大模型训练框架，支持lora、全参数微调等，通过定义yaml文件指定基础模型、数据集和训练参数，轻松开启您的大模型训练和微调工作。欢迎关注反馈和Star⭐️
+The framework of training large language models，support lora, full parameters fine tune etc, define yaml to start training/fine tune of your defined models, data and methods. Easy define and easy start. A large-scale model training framework that supports tasks such as LoRA and full-parameter fine-tuning. Easily initiate your large model training and fine-tuning work by defining a YAML file specifying the base model, dataset, and training parameters. Feedback and stars⭐️ are welcome!
 
 <img src="./docs/llm-finetune.png" alt="image" width=600 height="auto">
 
@@ -16,7 +16,7 @@ Use SHELL `bash` for command
 ```bash
 git clone https://github.com/OpenCSGs/llm-finetune.git
 cd llm-finetune
-pip install .  # Install from CN(亦可用清华源安装): 'pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple'
+pip install .  # Install from CN: 'pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple'
 ```
 
 ## 2. Easy Run
